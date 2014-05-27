@@ -4,6 +4,7 @@ PATH
     fakes3 (0.1.5.2)
       builder
       thor
+      xml-simple
 
 GEM
   remote: https://rubygems.org/
