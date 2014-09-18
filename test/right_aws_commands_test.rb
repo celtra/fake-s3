@@ -37,6 +37,20 @@ class RightAWSCommandsTest < Test::Unit::TestCase
     end
   end
 
+  def test_delete_objects
+    bucket = @s3.create_bucket("ruby_aws_s3_delete")
+
+    @s3.put("ruby_aws_s3_delete", "something_to_delete1","1234")
+    @s3.put("ruby_aws_s3_delete", "something_to_delete2","5678")
+    @s3.put("ruby_aws_s3_delete", "something_to_delete3","asdf")
+
+    assert_equal(3, @s3.list_bucket("ruby_aws_s3_delete").length)
+
+    @s3.delete_multiple("ruby_aws_s3_delete", ["something_to_delete1", "something_to_delete2", "something_to_delete3"])
+
+    assert_equal(0, @s3.list_bucket("ruby_aws_s3_delete").length)
+  end
+
   def test_large_store
     @s3.put("s3media","helloworld","Hello World Man!")
     buffer = ""
