@@ -211,6 +211,23 @@ module FakeS3
       end
     end
 
+    def delete_objects(bucket, objects, request)
+      begin
+        filenames = []
+        objects.each do |object_name|
+          filenames << File.join(@root,bucket.name,object_name)
+          object = bucket.find(object_name)
+          bucket.remove(object)
+        end
+
+        FileUtils.rm_rf(filenames)
+      rescue 
+        puts $!
+        $!.backtrace.each { |line| puts line }
+        return nil
+      end
+    end
+
     def create_metadata(content,request)
       metadata = {}
       metadata[:md5] = Digest::MD5.file(content).hexdigest
