@@ -353,6 +353,7 @@ module FakeS3
         raise "Unknown Request"
       end
 
+      webrick_req.continue
       return s_req
     end
 
