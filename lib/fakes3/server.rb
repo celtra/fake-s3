@@ -208,15 +208,23 @@ module FakeS3
         bucket_obj = @store.get_bucket(s_req.bucket)
         keys = XmlParser.delete_objects(s_req.webrick_request)
         @store.delete_objects(bucket_obj,keys,s_req.webrick_request)
+        response.status = 200
+        response.body = <<-eos.strip
+            <?xml version="1.0" encoding="UTF-8"?>
+            <DeleteResponse>
+            </DeleteResponse>
+        eos
       when Request::DELETE_OBJECT
         bucket_obj = @store.get_bucket(s_req.bucket)
         @store.delete_object(bucket_obj,s_req.object,s_req.webrick_request)
+        response.status = 204
+        response.body = ""
       when Request::DELETE_BUCKET
         @store.delete_bucket(s_req.bucket)
+        response.status = 204
+        response.body = ""
       end
 
-      response.status = 204
-      response.body = ""
     end
     
     def do_OPTIONS(request, response)
